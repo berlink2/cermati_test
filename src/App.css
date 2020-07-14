@@ -1,0 +1,6 @@
+@import "~antd/dist/antd.css";
+@import "~font-awesome/css/font-awesome.css";
+
+.smoke-grey {
+  background-color: #e5e5e5;
+}

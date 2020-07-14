@@ -1,0 +1,9 @@
+.open {
+  max-height: 500px;
+}
+
+.closed {
+  max-height: 0;
+
+  transition: max-height 0.5s ease-out;
+}
