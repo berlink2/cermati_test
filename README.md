@@ -1,5 +1,5 @@
 ## Installation
-
+Deployed at https://berlink2.github.io/cermati_test/
 `yarn install`
 
 
