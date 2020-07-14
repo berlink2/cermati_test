@@ -1,6 +1,10 @@
 ## Installation
 Deployed at https://berlink2.github.io/cermati_test/
-`yarn install`
+
+
+
+To install packages, firs enter `yarn install` into the terminal / command prompt.
+
 
 
 
