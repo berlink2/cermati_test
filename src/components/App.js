@@ -14,7 +14,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Layout className="smoke-grey">
+        <Layout className="bg-color">
           <Notification />
           <Logo />
           <PageHeader />
@@ -27,7 +27,7 @@ class App extends Component {
               color: "white",
             }}
           >
-            &#169; 2020 Berlian Khatulistiwa, All rights reserved
+            &#169; 2020 Berlian Khatulistiwa. All rights reserved
           </Footer>
         </Layout>
       </div>

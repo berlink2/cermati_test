@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Form, Input, Button } from "antd";
 import moment from "moment";
 import $ from "jquery";
 import NewsLetterContainer from "./styles/NewsLetterContainer";
 
 const NewsLetterPanel = () => {
-  const [isPanelOpen, setIsPanelOpen] = useState(false); //checks if panel is open
   const [position, setPosition] = useState(window.pageYOffset); //checks for position of screen
   const [expiration, setExpiration] = useState(null); //record of ten minutes from when panel is clicked
 
@@ -15,18 +14,31 @@ const NewsLetterPanel = () => {
     //check local storage if expiration time from past session exists
     const expTime = localStorage.getItem("expirationTime");
 
-    //if expiration time exists update expiration state, if not add scroll event listener
+    //add event listener for scrolling. if expiration time exists update expiration state,
     if (expTime) {
       const expTimeObject = moment(expTime);
 
       setExpiration(expTimeObject);
+      window.addEventListener("scroll", getPosition);
       return;
     } else {
       window.addEventListener("scroll", getPosition);
     }
   }, []);
 
-  //
+  //function that checks if page thresold is met and there is no active expiration
+  const handlePanel = useCallback(() => {
+    if (position > 0.3 && !expiration) {
+      $(".newsletter-panel").removeClass("closed");
+      $(".newsletter-panel").addClass("open");
+
+      return;
+    } else {
+      return;
+    }
+  }, [position, expiration]);
+
+  //starts timer that checks when expiration has passed and resets when it does
   useEffect(() => {
     let interval = null;
     if (expiration) {
@@ -35,13 +47,10 @@ const NewsLetterPanel = () => {
         if (currTime > expiration && expiration) {
           console.log("token removed");
           localStorage.removeItem("expirationTime");
-          // $(".newsletter-panel").removeClass("closed");
-          // $(".newsletter-panel").addClass("open");
-          //setIsPanelOpen(true);
-          window.addEventListener("scroll", getPosition);
 
           window.clearInterval(interval);
           setExpiration(null);
+          handlePanel();
         }
       }, 1000);
     } else {
@@ -52,22 +61,18 @@ const NewsLetterPanel = () => {
     return () => {
       window.clearInterval(interval);
     };
-  }, [expiration]);
+  }, [expiration, handlePanel]);
 
-  const handlePanel = () => {
-    if (position > 0.3) {
-      return "newsletter-panel open";
-    } else if (isPanelOpen) {
-      return "newsletter-panel open";
-    }
-
-    return "newsletter-panel closed";
-  };
+  //checks if thresold for toggling panel has been met
+  useEffect(() => {
+    handlePanel();
+  }, [position, handlePanel]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
+  //handles click event for canceling panel
   const handleClick = (e) => {
     e.preventDefault();
 
@@ -78,7 +83,6 @@ const NewsLetterPanel = () => {
     //store expiration time in local storage so expiration persists upon reloading
     localStorage.setItem("expirationTime", tenMinsLater);
     setExpiration(tenMinsLater);
-    setIsPanelOpen(false);
 
     //remove class that is keeping panel open and add class that will close panel
     $(".newsletter-panel").removeClass("open");
@@ -96,7 +100,6 @@ const NewsLetterPanel = () => {
     const scrolled = window / height;
     if (scrolled > 0.3) {
       setPosition(scrolled);
-      setIsPanelOpen(true);
     } else {
       setPosition(scrolled);
     }
@@ -104,7 +107,7 @@ const NewsLetterPanel = () => {
 
   return (
     <NewsLetterContainer>
-      <div className={handlePanel()}>
+      <div className="newsletter-panel closed">
         <span onClick={handleClick} className="cancel-button">
           x
         </span>

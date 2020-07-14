@@ -57,6 +57,16 @@ const NewsLetterContainer = styled.div`
     -webkit-transition: all 3s ease-in;
     transform: translateY(300rem);
   }
+
+  @media only screen and (max-width: 500px) {
+    .input {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    .submit-button {
+      width: 100%;
+    }
+  }
 `;
 
 export default NewsLetterContainer;
