@@ -45,7 +45,6 @@ const NewsLetterPanel = () => {
       interval = window.setInterval(() => {
         let currTime = new moment();
         if (currTime > expiration && expiration) {
-          console.log("token removed");
           localStorage.removeItem("expirationTime");
 
           window.clearInterval(interval);
@@ -77,7 +76,7 @@ const NewsLetterPanel = () => {
     e.preventDefault();
 
     //get expiration time i.e. ten minutes later
-    let tenMinsLater = new moment().add(10, "seconds");
+    let tenMinsLater = new moment().add(600, "seconds");
 
     //update state with current time and expiration time for panel
     //store expiration time in local storage so expiration persists upon reloading
